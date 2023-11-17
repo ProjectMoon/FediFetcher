@@ -100,7 +100,7 @@ def add_post_with_context(post, server, access_token, seen_urls, seen_hosts):
             known_context_urls = get_all_known_context_urls(server, [post],parsed_urls, seen_hosts)
             add_context_urls(server, access_token, known_context_urls, seen_urls)
         return True
-    
+
     return False
 
 def get_user_posts(user, known_followings, server, seen_hosts):
@@ -110,7 +110,7 @@ def get_user_posts(user, known_followings, server, seen_hosts):
         # We are adding it as 'known' anyway, because we won't be able to fix this.
         known_followings.add(user['acct'])
         return None
-    
+
     if(parsed_url[0] == server):
         log(f"{user['acct']} is a local user. Skip")
         known_followings.add(user['acct'])
@@ -188,7 +188,7 @@ def get_user_posts_lemmy(userName, userUrl, webserver):
                 for post in all_posts:
                     post['url'] = post['ap_id']
                 return all_posts
-            
+
         except Exception as ex:
             log(f"Error getting user posts for user {userName}: {ex}")
         return None
@@ -236,7 +236,7 @@ def get_user_posts_misskey(userName, webserver):
     except Exception as ex:
         log(f"Error getting posts by user {userName} from {webserver}. Exception: {ex}")
         return None
-    
+
 
 def get_new_follow_requests(server, access_token, max, known_followings):
     """Get any new follow requests for the specified user, up to the max number provided"""
@@ -245,11 +245,11 @@ def get_new_follow_requests(server, access_token, max, known_followings):
         "Authorization": f"Bearer {access_token}",
     })
 
-    # Remove any we already know about    
+    # Remove any we already know about
     new_follow_requests = filter_known_users(follow_requests, known_followings)
-    
+
     log(f"Got {len(follow_requests)} follow_requests, {len(new_follow_requests)} of which are new")
-        
+
     return new_follow_requests
 
 def filter_known_users(users, known_users):
@@ -262,24 +262,24 @@ def get_new_followers(server, user_id, max, known_followers):
     """Get any new followings for the specified user, up to the max number provided"""
     followers = get_paginated_mastodon(f"https://{server}/api/v1/accounts/{user_id}/followers", max)
 
-    # Remove any we already know about    
+    # Remove any we already know about
     new_followers = filter_known_users(followers, known_followers)
-    
+
     log(f"Got {len(followers)} followers, {len(new_followers)} of which are new")
-        
+
     return new_followers
 
 def get_new_followings(server, user_id, max, known_followings):
     """Get any new followings for the specified user, up to the max number provided"""
     following = get_paginated_mastodon(f"https://{server}/api/v1/accounts/{user_id}/following", max)
 
-    # Remove any we already know about    
+    # Remove any we already know about
     new_followings = filter_known_users(following, known_followings)
-    
+
     log(f"Got {len(following)} followings, {len(new_followings)} of which are new")
-        
+
     return new_followings
-    
+
 
 def get_user_id(server, user = None, access_token = None):
     """Get the user id from the server, using a username"""
@@ -295,11 +295,11 @@ def get_user_id(server, user = None, access_token = None):
         }
     else:
         raise Exception('You must supply either a user name or an access token, to get an user ID')
-    
+
     response = get(url, headers=headers)
 
     if response.status_code == 200:
-        return response.json()['id'] 
+        return response.json()['id']
     elif response.status_code == 404:
         raise Exception(
             f"User {user} was not found on server {server}."
@@ -316,7 +316,7 @@ def get_timeline(server, access_token, max):
     url = f"https://{server}/api/v1/timelines/home"
 
     try:
-    
+
         response = get_toots(url, access_token)
 
         if response.status_code == 200:
@@ -347,7 +347,7 @@ def get_timeline(server, access_token, max):
     log(f"Found {len(toots)} toots in timeline")
 
     return toots
-    
+
 def get_toots(url, access_token):
     response = get( url, headers={
         "Authorization": f"Bearer {access_token}",
@@ -369,7 +369,7 @@ def get_toots(url, access_token):
         raise Exception(
             f"Error getting URL {url}. Status code: {response.status_code}"
         )
-    
+
 def get_active_user_ids(server, access_token, reply_interval_hours):
     """get all user IDs on the server that have posted a toot in the given
        time interval"""
@@ -459,7 +459,7 @@ def get_reply_toots(user_id, server, access_token, seen_urls, reply_since):
 def get_all_known_context_urls(server, reply_toots, parsed_urls, seen_hosts):
     """get the context toots of the given toots from their original server"""
     known_context_urls = set()
-    
+
     for toot in reply_toots:
         if toot_has_parseable_url(toot, parsed_urls):
             url = toot["url"] if toot["reblog"] is None else toot["reblog"]["url"]
@@ -470,10 +470,10 @@ def get_all_known_context_urls(server, reply_toots, parsed_urls, seen_hosts):
                     known_context_urls.add(item)
             else:
                 log(f"Error getting context for toot {url}")
-    
+
     known_context_urls = set(filter(lambda url: not url.startswith(f"https://{server}/"), known_context_urls))
     log(f"Found {len(known_context_urls)} known context toots")
-    
+
     return known_context_urls
 
 
@@ -482,7 +482,7 @@ def toot_has_parseable_url(toot,parsed_urls):
     if(parsed is None) :
         return False
     return True
-                
+
 
 def get_all_replied_toot_server_ids(
     server, reply_toots, replied_toot_server_ids, parsed_urls
@@ -533,7 +533,7 @@ def parse_user_url(url):
     match = parse_mastodon_profile_url(url)
     if match is not None:
         return match
-    
+
     match = parse_pleroma_profile_url(url)
     if match is not None:
         return match
@@ -548,7 +548,7 @@ def parse_user_url(url):
         return match
 
     log(f"Error parsing Profile URL {url}")
-    
+
     return None
 
 def parse_url(url, parsed_urls):
@@ -561,7 +561,7 @@ def parse_url(url, parsed_urls):
         match = parse_mastodon_uri(url)
         if match is not None:
             parsed_urls[url] = match
-    
+
     if url not in parsed_urls:
         match = parse_pleroma_url(url)
         if match is not None:
@@ -585,7 +585,7 @@ def parse_url(url, parsed_urls):
     if url not in parsed_urls:
         log(f"Error parsing toot URL {url}")
         parsed_urls[url] = None
-    
+
     return parsed_urls[url]
 
 def parse_mastodon_profile_url(url):
@@ -623,7 +623,7 @@ def parse_pleroma_url(url):
         url = get_redirect_url(url)
         if url is None:
             return None
-        
+
         match = re.match(r"/notice/(?P<toot_id>[^/]+)", url)
         if match is not None:
             return (server, match.group("toot_id"))
@@ -769,7 +769,7 @@ def get_lemmy_comment_context(webserver, toot_id, toot_url):
     except Exception as ex:
         log(f"Error getting comment {toot_id} from {toot_url}. Exception: {ex}")
         return []
-    
+
     if resp.status_code == 200:
         try:
             res = resp.json()
@@ -878,6 +878,7 @@ def add_context_urls(server, access_token, context_urls, seen_urls):
 
 def add_context_url(url, server, access_token):
     """add the given toot URL to the server"""
+    time.sleep(15) # shitfix for firefish rate-limiting
     search_url = f"https://{server}/api/v2/search?q={url}&resolve=true&limit=1"
 
     try:
@@ -904,7 +905,7 @@ def add_context_url(url, server, access_token):
             f"Error adding url {search_url} to server {server}. Status code: {resp.status_code}"
         )
         return False
-    
+
 def get_paginated_mastodon(url, max, headers = {}, timeout = 0, max_tries = 5):
     """Make a paginated request to mastodon"""
     if(isinstance(max, int)):
@@ -970,7 +971,7 @@ def get(url, headers = {}, timeout = 0, max_tries = 5):
 
     if timeout == 0:
         timeout = arguments.http_timeout
-        
+
     response = requests.get( url, headers= h, timeout=timeout)
     if response.status_code == 429:
         if max_tries > 0:
@@ -980,7 +981,7 @@ def get(url, headers = {}, timeout = 0, max_tries = 5):
             log(f"Rate Limit hit requesting {url}. Waiting {wait} sec to retry at {response.headers['x-ratelimit-reset']}")
             time.sleep(wait)
             return get(url, headers, timeout, max_tries - 1)
-        
+
         raise Exception(f"Maximum number of retries exceeded for rate limited request {url}")
     return response
 
@@ -1022,10 +1023,10 @@ class ServerList:
 
     def get(self, key):
         return self._dict[key]
-    
+
     def pop(self,key):
         return self._dict.pop(key)
-    
+
     def __contains__(self, item):
         return item in self._dict
 
@@ -1034,7 +1035,7 @@ class ServerList:
 
     def __len__(self):
         return len(self._dict)
-    
+
     def toJSON(self):
         return json.dumps(self._dict,default=str)
 
@@ -1063,7 +1064,7 @@ class OrderedSet:
 
     def pop(self, item):
         self._dict.pop(item)
-    
+
     def get(self, item):
         return self._dict[item]
 
@@ -1079,7 +1080,7 @@ class OrderedSet:
 
     def __len__(self):
         return len(self._dict)
-    
+
     def toJSON(self):
         return json.dumps(self._dict,default=str)
 
@@ -1260,9 +1261,9 @@ if __name__ == "__main__":
         log("You must supply at least a server name and an access token")
         sys.exit(1)
 
-    # in case someone provided the server name as url instead, 
+    # in case someone provided the server name as url instead,
     setattr(arguments, 'server', re.sub(r"^(https://)?([^/]*)/?$", "\\2", arguments.server))
-        
+
 
     runId = uuid.uuid4()
 
@@ -1283,7 +1284,7 @@ if __name__ == "__main__":
             with open(LOCK_FILE, "r", encoding="utf-8") as f:
                 lock_time = parser.parse(f.read())
 
-            if (datetime.now() - lock_time).total_seconds() >= arguments.lock_hours * 60 * 60: 
+            if (datetime.now() - lock_time).total_seconds() >= arguments.lock_hours * 60 * 60:
                 os.remove(LOCK_FILE)
                 log(f"Lock file has expired. Removed lock file.")
             else:
@@ -1341,7 +1342,7 @@ if __name__ == "__main__":
             lastCheck = recently_checked_users.get(user)
             userAge = datetime.now(lastCheck.tzinfo) - lastCheck
             if(userAge.total_seconds() > arguments.remember_users_for_hours * 60 * 60):
-                recently_checked_users.pop(user)    
+                recently_checked_users.pop(user)
 
         parsed_urls = {}
 
@@ -1416,7 +1417,7 @@ if __name__ == "__main__":
                 user_id = get_user_id(arguments.server, arguments.user, token)
                 followings = get_new_followings(arguments.server, user_id, arguments.max_followings, all_known_users)
                 add_user_posts(arguments.server, token, followings, known_followings, all_known_users, seen_urls, seen_hosts)
-            
+
             if arguments.max_followers > 0:
                 log(f"Getting posts from last {arguments.max_followers} followers")
                 user_id = get_user_id(arguments.server, arguments.user, token)
