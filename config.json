@@ -1,6 +1,8 @@
 {
   "server": "social.agnos.is",
-  "home-timeline-length": 200,
-  "max-followings": 80,
-  "from-notifications": 1
+  "home-timeline-length": 1,
+  "max-followings": 5,
+  "max-followers": 5,
+  "from-notifications": 1,
+  "http-timeout": 15,
 }

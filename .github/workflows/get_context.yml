@@ -3,9 +3,9 @@ concurrency: get_context
 
 on:
   workflow_dispatch:
-  schedule:
-     - cron: '3 * * * *'
-     
+  # schedule:
+  #    - cron: '3 * * * *'
+
 jobs:
   run:
     runs-on: ubuntu-latest
