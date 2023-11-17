@@ -3,8 +3,8 @@ concurrency: get_context
 
 on:
   workflow_dispatch:
-  schedule:
-     - cron: '5 8 1 * *'
+  #schedule:
+  #   - cron: '5 8 1 * *'
 
 jobs:
   run:
