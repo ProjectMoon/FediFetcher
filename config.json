@@ -4,5 +4,5 @@
   "max-followings": 5,
   "max-followers": 5,
   "from-notifications": 1,
-  "http-timeout": 15,
+  "http-timeout": 15
 }
