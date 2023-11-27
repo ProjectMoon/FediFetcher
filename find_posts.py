@@ -882,7 +882,6 @@ def add_context_urls(server, access_token, context_urls, seen_urls):
 
 def add_context_url(url, server, access_token):
     """add the given toot URL to the server"""
-    time.sleep(15) # shitfix for firefish rate-limiting
     search_url = f"https://{server}/api/v2/search?q={url}&resolve=true&limit=1"
 
     try:
