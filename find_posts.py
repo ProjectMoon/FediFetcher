@@ -128,7 +128,12 @@ def get_user_posts(user, known_followings, server, seen_hosts):
         return get_user_posts_lemmy(parsed_url[1], user['url'], post_server['webserver'])
 
     if post_server['misskeyApiSupport']:
-        return get_user_posts_misskey(parsed_url[1], post_server['webserver'])
+        if user['username']:
+            username = user['username']
+        else:
+            username = parsed_url[1]
+
+        return get_user_posts_misskey(username, post_server['webserver'])
 
     log(f'server api unknown for {post_server["webserver"]}, cannot fetch user posts')
     return None
