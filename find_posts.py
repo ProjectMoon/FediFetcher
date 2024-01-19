@@ -1228,7 +1228,7 @@ def set_server_apis(server):
     # support for new server software should be added here
     software_apis = {
         'mastodonApiSupport': ['mastodon', 'pleroma', 'akkoma', 'pixelfed', 'hometown', 'iceshrimp'],
-        'misskeyApiSupport': ['misskey', 'calckey', 'firefish', 'foundkey', 'sharkey'],
+        'misskeyApiSupport': ['misskey', 'calckey', 'firefish', 'foundkey', 'sharkey', 'catodon'],
         'lemmyApiSupport': ['lemmy']
     }
 
